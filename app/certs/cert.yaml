@@ -1,0 +1,22 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: shadowbox-cert
+spec:
+  # Secret names are always required.
+  secretName: shadowbox-cert
+  isCA: false
+  commonName: outline.svc.cluster.local
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+  - "*.outline.svc.cluster.local"
+  issuerRef:
+    name: my-ca-issuer
+    kind: Issuer
+    group: cert-manager.io

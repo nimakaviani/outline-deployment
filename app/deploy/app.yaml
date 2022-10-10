@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: outline-server
+  labels:
+    app: outline
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: outline
+  template:
+    metadata:
+      labels:
+        app: outline
+    spec:
+      containers:
+      - name: shadowbox
+        image: nimak/outline-server:0.1
+        ports:
+        - containerPort:
+            valueFrom:
+              configMapKeyRef:
+                name: shadowbox-config
+                key: SB_API_PORT
+        - containerPort: 9090
+        volumeMounts:
+          - mountPath:
+              valueFrom:
+               configMapKeyRef:
+                 name: shadow-config
+                 key: SB_STATE_DIR
+            name: cache-volume
+          - mountPath:
+              valueFrom:
+               configMapKeyRef:
+                 name: shadow-config
+                 key: SB_CERTIFICATE_PATH
+            name: shadowbox-cert
+            readOnly: true
+        env:
+        - name: SB_API_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: SB_API_PORT
+        - name: SB_API_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: SB_API_PORT
+        - name: SB_API_PREFIX
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: SB_API_PREFIX
+        - name: SB_CERTIFICATE_FILE
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: SB_CERTIFICATE_FILE
+        - name: SB_PRIVATE_KEY_FILE
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: SB_PRIVATE_KEY_FILE
+        - name: SB_METRICS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: SB_METRICS_URL
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: LOG_LEVEL
+        - name: SB_STATE_DIR
+          valueFrom:
+            configMapKeyRef:
+              name: shadowbox-config
+              key: SB_STATE_DIR
+        volumes:
+        - name: cache-volume
+          emptyDir: {}
+        - name: certs
+          secret:
+            secretName: shadowbox-cert
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shadowbox-lb
+  labels:
+    app: shadowbox
+spec:
+  type: LoadBalancer
+  selector:
+    app: shadowbox
+  ports:
+    - name: manager
+      port:
+        valueFrom:
+          configMapKeyRef:
+            name: shadowbox-config
+            key: SB_API_PORT
+      targetPort:
+        valueFrom:
+          configMapKeyRef:
+            name: shadowbox-config
+            key: SB_API_PORT
+      protocol: TCP
+    - name: accessKey
+      port:
+        valueFrom:
+          configMapKeyRef:
+            name: shadowbox-config
+            key: SB_API_PORT
+      targetPort:
+        valueFrom:
+          configMapKeyRef:
+            name: shadowbox-config
+            key: SB_API_PORT
+      protocol: TCP

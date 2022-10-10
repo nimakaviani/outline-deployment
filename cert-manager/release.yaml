@@ -1,0 +1,9 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: cert-manager
+spec:
+  chart:
+    repository: https://charts.jetstack.io
+    name: jetstack
+    version: 1.9.1

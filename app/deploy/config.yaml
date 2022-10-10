@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shadowbox-config
+data:
+  SB_API_PORT: 8081
+  SB_API_PREFIX: TestApiPrefix
+  SB_METRICS_URL: https://dev.metrics.getoutline.org
+  LOG_LEVEL: debug
+  SB_STATE_DIR: /var/outline/state
+  SB_CERTIFICATE_PATH: /var/outline/certs
+  SB_CERTIFICATE_FILE: /var/outline/certs/tls.crt
+  SB_PRIVATE_KEY_FILE: /var/outline/certs/tls.key
+
