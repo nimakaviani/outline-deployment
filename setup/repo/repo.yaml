@@ -2,7 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: GitRepository
 metadata:
   name: outline-deployment
-  namespace: flux-system
+  namespace: outline-system
 spec:
   interval: 5m0s
   url: ssh://git@github.com/nimakaviani/outline-deployment.git
