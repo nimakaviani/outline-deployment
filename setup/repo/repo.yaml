@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 5m0s
-  url: https://github.com/nimakaviani/outline-deployment
+  url: ssh://git@github.com/nimakaviani/outline-deployment.git
   secretRef:
     name: outline-deployment
   ref:
